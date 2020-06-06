@@ -14,7 +14,6 @@
           <el-button type="primary" @click.enter="login()" >登&nbsp;录</el-button>
         </el-form-item>
       </el-form>
-    </div>
   </div>
 </template>
 
@@ -30,11 +29,15 @@ export default {
         }
       }
     },
-    methods: {
+  created() {
+    // 进入前先清除所有tag
+    this.$store.commit('clearAllTagList');
+  },
+  methods: {
       login() {
         if(this.ruleForm.user === 'test' && this.ruleForm.passwd === '123456'){
           window.sessionStorage.setItem("user", 'test');
-          this.$router.push("/main");
+          this.$router.push("/components/Home");
         }else{
           alert("账号或密码错误！")
         }
