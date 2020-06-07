@@ -106,7 +106,7 @@ router.beforeEach((to, from, next) => {
         if (user !== 'test') {
             next('/')
         } else {
-            console.log('to', to);
+            //console.log('to', to);
             router.app.$options.store.commit('setCurPage', to.meta.title);
             //此处name为tag标签名，componentName为组件名
             router.app.$options.store.commit('addTag',{name: to.meta.title, path: to.path,

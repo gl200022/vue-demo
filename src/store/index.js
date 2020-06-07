@@ -23,7 +23,7 @@ export default new Vuex.Store({
                 keepAlive: obj.keepAlive,
                 componentName: obj.componentName
             })
-            console.log(this.state.tagList);
+            //console.log(this.state.tagList);
             //判断是否需要缓存
             // let cache = state.tagList.filter((item, index, arr) => {
             //     //判断条件 返回与该标签name不同的对象
@@ -31,14 +31,13 @@ export default new Vuex.Store({
             //         return item;
             //     }
             // })
-            console.log('tagList', state.tagList);
+            //console.log('tagList', state.tagList);
             let temp = [];
             state.tagList.forEach(item => {
                 if(item.keepAlive){
                     temp.push(item.componentName);
                 }
             })
-            console.log('temp', temp);
             this.state.cacheRoutes = temp.join(',');
         },
         //清除页面缓存
