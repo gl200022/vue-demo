@@ -19,6 +19,7 @@
 
 <script>
 export default {
+    name: 'Login',
     data() { // 页面的初始数据
       return {
         ruleForm: { // 存储用户输入数据

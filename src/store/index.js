@@ -5,8 +5,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        tagList: [], //缓存路由，制作tag—view
-        curTag: ''  //当前页
+        tagList: [],        //tag—view中的路由
+        curTag: '',         //当前页
+        cacheRoutes: ''     //缓存的路由名称
     },
     mutations: {
         //添加缓存页面 添加前先判断是否存在该标签
@@ -18,8 +19,27 @@ export default new Vuex.Store({
             this.state.tagList.push({
                 name: obj.name,  //名称
                 path: obj.path,    //路径
-                type: 'info'
+                type: 'info',
+                keepAlive: obj.keepAlive,
+                componentName: obj.componentName
             })
+            console.log(this.state.tagList);
+            //判断是否需要缓存
+            // let cache = state.tagList.filter((item, index, arr) => {
+            //     //判断条件 返回与该标签name不同的对象
+            //     if (item.keepAlive) {
+            //         return item;
+            //     }
+            // })
+            console.log('tagList', state.tagList);
+            let temp = [];
+            state.tagList.forEach(item => {
+                if(item.keepAlive){
+                    temp.push(item.componentName);
+                }
+            })
+            console.log('temp', temp);
+            this.state.cacheRoutes = temp.join(',');
         },
         //清除页面缓存
         removeTag: function (state, obj) {
@@ -38,7 +58,13 @@ export default new Vuex.Store({
                     this.state.curTag = tagList[len-1].name;
                 }
             }
-
+            let temp = [];
+            state.tagList.forEach(item => {
+                if(item.keepAlive){
+                    temp.push(item.componentName);
+                }
+            })
+            this.state.cacheRoutes = temp.join(',');
         },
         //设置当前页
         setCurPage(state, name) {

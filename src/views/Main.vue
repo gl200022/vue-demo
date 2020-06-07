@@ -45,10 +45,11 @@
                     </el-tag>
                 </el-header>
                 <el-main>
-                    <keep-alive>
-                        <router-view v-if="$route.meta.keepAlive"></router-view>
+                    <!--第一次点击菜单是是不在菜单里面的，所以不会缓存，点击后根据keepalive
+                            值判断是否需要将其添加到cacheRoutes，关闭时在移除即可-->
+                    <keep-alive :include="$store.state.cacheRoutes">
+                        <router-view/>
                     </keep-alive>
-                    <router-view v-if="!$route.meta.keepAlive"></router-view>
                 </el-main>
             </el-container>
         </el-container>
@@ -58,6 +59,7 @@
 
 <script>
     export default {
+        name: 'Main',
         data() {
             return {
                 navList: [
