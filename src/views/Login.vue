@@ -1,6 +1,6 @@
 <template>
   <div class="loginbody">
-      <el-form v-model="ruleForm"  status-icon  :rules="rules"> 
+      <el-form v-model="ruleForm"  status-icon  :rules="rules">
         <!-- 用户名 -->
         <el-form-item>
           <el-input v-model="ruleForm.user" prefix-icon="el-icon-user" placeholder="用户名" autocomplete="off"></el-input>
@@ -36,12 +36,19 @@ export default {
   },
   methods: {
       login() {
-        if(this.ruleForm.user === 'test' && this.ruleForm.passwd === '123456'){
-          window.sessionStorage.setItem("user", 'test');
-          this.$router.push("/components/Home");
-        }else{
-          alert("账号或密码错误！")
-        }
+        let params = {userName: this.ruleForm.user, password: this.ruleForm.passwd};
+        this.$axios({
+          url: "/login",
+          method: "post",
+          params: params
+        }).then(res => {
+          if(res.data.isLogin){
+            window.sessionStorage.setItem("user", 'test');
+            this.$router.push("/components/Home");
+          }else{
+            alert("账号或密码错误！")
+          }
+        })
       }
     }
   }
