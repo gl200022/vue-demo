@@ -81,7 +81,50 @@
                 isCollapse: false
             }
         },
+        created() {
+            setInterval(this.notify, 30000);
+            this.initWebSocket()
+        },
         methods: {
+            initWebSocket: function () {
+                // WebSocket与普通的请求所用协议有所不同，ws等同于http，wss等同于https
+                this.websock = new WebSocket("ws://localhost:30070/websocket/666666");
+                this.websock.onopen = this.websocketonopen;
+                this.websock.onerror = this.websocketonerror;
+                this.websock.onmessage = this.websocketonmessage;
+                this.websock.onclose = this.websocketclose;
+            },
+            websocketonopen: function () {
+                console.log("WebSocket连接成功");
+            },
+            websocketonerror: function (e) {
+                console.log("WebSocket连接发生错误");
+            },
+            websocketonmessage: function (e) {
+                console.log(e.data);                // console.log(e);
+                this.$notify({
+                    title: '消息',
+                    message: e.data,
+                    position: 'bottom-right',
+                    onClick: this.alert
+                });
+            },
+            websocketclose: function (e) {
+                console.log("connection closed (" + e.code + ")");
+            },
+            notify() {
+                this.$notify({
+                    title: '消息',
+                    message: '您有一条新提醒，请注意查收!',
+                    position: 'bottom-right',
+                    onClick: this.alert
+                });
+            },
+            alert() {
+                this.$alert('您的余额不足，请及时充值', '消息', {
+                    confirmButtonText: '确定'
+                });
+            },
             changeCollapse() {
                 console.log(this.isCollapse);
                 this.isCollapse = (!this.isCollapse);
@@ -92,7 +135,7 @@
             closeTag(tag) {
                 this.$store.commit('removeTag', tag);
                 let len = this.$store.state.tagList.length;
-                this.$router.push(this.$store.state.tagList[len-1].path);
+                this.$router.push(this.$store.state.tagList[len - 1].path);
             },
             changeTag(tag) {
                 this.$store.commit('setCurPage', tag.name);
